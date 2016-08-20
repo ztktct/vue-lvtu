@@ -1,0 +1,47 @@
+
+http://lvtudiandian.com:8080/train/
+
+1.≤π∆±—”≥§
+function queryUpTicketList(){
+		url : http://localhost:8080/train/upTicket.action?action=queryUpTicketList
+		$.post("upTicket.action",
+				{
+				action:"queryUpTicketList",
+				"qform.ticketShopId":1,
+				"qform.ticketIs":0,
+				"qform.pageIndex": 1,
+				"qform.pageSize":10
+				},function(data){
+					
+				if(data.result=='SKerrorMessages'){
+					$.zui.messager.show(data.msg,{type:"warning"});
+				}else{
+					$.zui.messager.show(data.msg,{typpe:"warning"});
+					console.log("data="+JSON.stringify(data.data));
+				}
+		});
+	}
+});
+
+
+/******************************************∂©µ•≤È—Ø*******************************************************************/
+<script type="text/javascript">
+	$(document).ready(function(){
+		url : http://localhost:8080/train/orderManage.action
+			$.post("orderManage.action",{
+				action:"queryOrderListForZhang",
+				"orderModel.pageIndex":1,
+				"orderModel.pageSize":10,
+				"orderModel.orderReceiveShopId":1,
+				"orderModel.orderStep":4
+			},function(data){
+					if(data.result=='SKerrorMessages'){
+						$.zui.messager.show(data.msg,{type:"warning"});
+						return;
+					}else{
+						$.zui.messager.show(data.msg,{type:"success"});
+						console.log("data="+JSON.stringify(data.data));
+					}
+			});
+	});
+</script>

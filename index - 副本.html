@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>vue_lvtu</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<script src="./static/js/jquery-2.1.4.min.js"></script>
+	<script src="./static/js/jquery-weui.min.js"></script>
+	<script src="./static/js/autoFontSize.js"></script>
+	<script src="./static/js/cordova.js"></script>
+</head>
+
+<body>
+	<div id="app"></div>
+
+	<script>
+		// 设备准备完毕后调用
+     	var onDeviceReady = function() {
+            console.log("JPushPlugin:Device ready!");
+            initiateUI();
+        };
+
+		// 获得唯一的设备标识
+        var getRegistrationID = function() {
+            window.plugins.jPushPlugin.getRegistrationID(onGetRegistrationID);
+        };
+		// 获得设备标识后的回调
+        var onGetRegistrationID = function(data) {
+            try {
+                console.log("JPushPlugin:registrationID is " + data);
+                if (data.length == 0) {
+                    var t1 = window.setTimeout(getRegistrationID, 1000);
+                }
+            } catch (exception) {
+                console.log(exception);
+            }
+        };
+
+		// 当设备别名或tag改变后触发
+        var onTagsWithAlias = function(event) {
+            try {
+                var result = "result code:" + event.resultCode + " ";
+                result += "tags:" + event.tags + " ";
+                result += "alias:" + event.alias + " ";
+                console.log(result)
+            } catch (exception) {
+                console.log(exception)
+            }
+        };
+
+		// 点击通知进入应用程序时会调用该方法
+        var onOpenNotification = function(event) {
+            try {
+                var alertContent;
+                if (device.platform == "Android") {
+                    alertContent = event.alert;
+                } else {
+                    alertContent = event.aps.alert;
+                }
+                alert("open Notification:" + alertContent);
+            } catch (exception) {
+                console.log("JPushPlugin:onOpenNotification" + exception);
+            }
+        };
+
+		// 收到通知时会调用该方法
+        var onReceiveNotification = function(event) {
+            try {
+                var alertContent;
+                if (device.platform == "Android") {
+                    alertContent = event.alert;
+                } else {
+                    alertContent = event.aps.alert;
+                }
+                $("#notificationResult").html(alertContent);
+            } catch (exception) {
+                console.log(exception);
+            }
+        };
+
+		// 收到自定义消息时调用该事件
+        // var onReceiveMessage = function(event) {
+        //     try {
+        //         var message;
+        //         if (device.platform == "Android") {
+        //             message = event.message;
+        //         } else {
+        //             message = event.content;
+        //         }
+        //         $("#messageResult").html(message);
+        //     } catch (exception) {
+        //         console.log("JPushPlugin:onReceiveMessage-->" + exception);
+        //     }
+        // };
+
+        var initiateUI = function() {
+            try {
+                window.plugins.jPushPlugin.init();	// 插件初始化
+                getRegistrationID();				// 获得ID
+				window.plugins.jPushPlugin.setAlias( 'G1007' );	// 设置设备别名
+                if (device.platform != "Android") {
+                    window.plugins.jPushPlugin.setDebugModeFromIos();
+                    window.plugins.jPushPlugin.setApplicationIconBadgeNumber(0);
+                } else {
+                    window.plugins.jPushPlugin.setDebugMode(true);		// 调试模式
+                    window.plugins.jPushPlugin.setStatisticsOpen(true);	// 统计
+                }
+            } catch (exception) {
+                console.log(exception);
+            }
+        };
+
+		// 设备准备完毕
+		document.addEventListener("deviceready", onDeviceReady, false);
+		// 监听设备别名设置
+        document.addEventListener("jpush.setTagsWithAlias", onTagsWithAlias, false);
+        // 点击通知进入应用程序时会触发该事件
+        document.addEventListener("jpush.openNotification", onOpenNotification, false);
+		// 收到通知时会触发该事件
+        document.addEventListener("jpush.receiveNotification", onReceiveNotification, false);
+		// 收到自定义消息时触发这个事件，推荐使用事件的方式传递。
+        // document.addEventListener("jpush.receiveMessage", onReceiveMessage, false);
+
+    </script>
+</body>
+
+</html>
