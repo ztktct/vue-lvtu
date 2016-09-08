@@ -10,11 +10,15 @@
                 <label class="weui_label">账　号：</label>
             </div>
             <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" v-model="account" type="text" placeholder="用户名/手机/邮箱" @focus="showAccount" @blur="hideAccount">
+                <input class="weui_input" v-model="account" type="tel" placeholder="用户名/手机/邮箱" @focus="showAccount" @blur="hideAccount">
                 <ul class="tip" v-show="showAccounts">
-                    <li v-for="accountItem in accounts" @touchstart="selectAccount(accountItem)" track-by="$index">{{accountItem}}</li>
+                    <li v-for="accountItem in accounts" @touchstart="selectAccount(accountItem)" track-by="$index">
+                        {{accountItem.acc}}
+                        <em>({{accountItem.train}})</em>
+                    </li>
                 </ul>
             </div>
+            <em v-if="train != ''">({{train}})</em>
         </div>
         <div class="weui_cell weui_cell_primary">
             <div class="weui_cell_hd">
@@ -27,7 +31,7 @@
     </div>
 
     <div class="weui_btn_area">
-        <a class="weui_btn weui_btn_primary" href="javascript:;" @click="login()">登录</a>
+        <a class="weui_btn weui_btn_primary" href="javascript:;" @click="login">登录</a>
     </div>
 </template>
 	
@@ -47,7 +51,8 @@
                 showLoaing:false,
                 password:'',
                 account:'',         // 当前帐号
-                accounts:[],        // 所有保存账号
+                train:'',           // 当前账号对应的车次
+                accounts:[],        // 所有保存账号、密码 [{acc:'',pass:''}]
                 showAccounts:false  // 提示所有已保存账号
             }
         },
@@ -58,8 +63,7 @@
 			getters:{
 				websit : state => state.websit,
 				hasLogin: state=> state.hasLogin,
-                partnerId:state => state.partnerId,
-                train: state => state.train
+                partnerId:state => state.partnerId
 			},
             actions:{
                 setUserInfo,
@@ -73,11 +77,25 @@
             },
             // 隐藏账号
             hideAccount:function(){
+                // 当失去焦点时，判断输入的账号是否存在，
+                // 如果不存在，则表示为新账号，清空密码和车次
+                let hasSame = false;
+                this.accounts.forEach( account =>{
+                    if( account.acc == this.account){
+                        hasSame = true;
+                    }
+                });
                 this.showAccounts = false;
+                if(!hasSame){
+                    this.password ='';
+                    this.train ='';
+                }
             },
             // 选择账号
             selectAccount:function(acc){
-                this.account = acc;
+                this.account = acc.acc;
+                this.password = acc.pass;
+                this.train = acc.train;
                 this.showAccounts = false;
             },
             // 登陆
@@ -125,13 +143,19 @@
                             queryNewMessage(_self,audio);
 
                             // 保存账号
-                            this.accounts.forEach( (account ,i)=>{
-                                if(account === this.account){
+                            this.accounts.forEach( account =>{
+                                if(account.acc === this.account){
                                     this.accounts.$remove(account);
                                     return;
                                 }
                             });
-                             this.accounts.splice(0,0,this.account);
+                            // 在accounts数组第一个位置添加账号
+                            let newAccount ={
+                                acc: this.account,
+                                pass : this.password,
+                                train : data.user.partnerName
+                            };
+                            this.accounts.splice(0,0,newAccount);
 
                             localStorage.setItem('LVTUDIANDIAN_USERACCOUNTS',JSON.stringify(this.accounts));
 
@@ -151,7 +175,9 @@
             // 当处于登陆页时，默认清空所有用户数据
             this.delUserInfo();
             this.accounts = JSON.parse(localStorage.getItem('LVTUDIANDIAN_USERACCOUNTS')) || [];
-            this.account = this.accounts[0];
+            this.account = this.accounts[0].acc;
+            this.password = this.accounts[0].pass;
+            this.train = this.accounts[0].train;
             cancleReceiver();   // 取消接收消息
         }
     }
@@ -201,6 +227,13 @@
             &:hover{
                 background:#f5f5f5;
             }
+        }
+    }
+    .weui_cell{
+        position:relative;
+        em{
+            position:absolute;
+            right:3%;
         }
     }
 </style>
