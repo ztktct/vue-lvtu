@@ -1,38 +1,41 @@
 <template>
-    <loading v-if="showLoaing"></loading>
-    <div class="weui_header">
-		<img :src="logo" style="width:22%;" alt="">
-	</div>
-	<!-- 登陆 -->
-    <div class="weui_cells weui_cells_form">
-        <div class="weui_cell">
-            <div class="weui_cell_hd">
-                <label class="weui_label">账　号：</label>
-            </div>
-            <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" v-model="account" type="tel" placeholder="用户名/手机/邮箱" @focus="showAccount" @blur="hideAccount">
-                <ul class="tip" v-show="showAccounts">
-                    <li v-for="accountItem in accounts" @touchstart="selectAccount(accountItem)" track-by="$index">
-                        {{accountItem.acc}}
-                        <em>({{accountItem.train}})</em>
-                    </li>
-                </ul>
-            </div>
-            <em v-if="train != ''">({{train}})</em>
+    <div class="pagewrap" @touchend="hideAccountOnly">
+        <loading v-if="showLoaing"></loading>
+        <div class="weui_header" >
+            <img :src="logo" style="width:22%;" alt="">
         </div>
-        <div class="weui_cell weui_cell_primary">
-            <div class="weui_cell_hd">
-                <label class="weui_label">密　码：</label>
+        <!-- 登陆 -->
+        <div class="weui_cells weui_cells_form">
+            <div class="weui_cell">
+                <div class="weui_cell_hd">
+                    <label class="weui_label">账　号：</label>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <input class="weui_input" v-model="account" type="tel" placeholder="用户名/手机/邮箱" @focus="showAccount" @blur="hideAccount">
+                    <ul class="tip" v-show="showAccounts">
+                        <li v-for="accountItem in accounts" @touchstart="selectAccount(accountItem)" track-by="$index">
+                            {{accountItem.acc}}
+                            <em>({{accountItem.train}})</em>
+                        </li>
+                    </ul>
+                </div>
+                <em v-if="train != ''">({{train}})</em>
             </div>
-            <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" v-model="password" type="password" placeholder="请输入密码">
+            <div class="weui_cell weui_cell_primary">
+                <div class="weui_cell_hd">
+                    <label class="weui_label">密　码：</label>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <input class="weui_input" v-model="password" type="password" placeholder="请输入密码">
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="weui_btn_area">
-        <a class="weui_btn weui_btn_primary" href="javascript:;" @click="login">登录</a>
+        <div class="weui_btn_area">
+            <a class="weui_btn weui_btn_primary" href="javascript:;" @click="login">登录</a>
+        </div>
     </div>
+    
 </template>
 	
 <script>
@@ -90,6 +93,10 @@
                     this.password ='';
                     this.train ='';
                 }
+            },
+            // 真·隐藏账号
+            hideAccountOnly:function(){
+                this.showAccounts = false;
             },
             // 选择账号
             selectAccount:function(acc){
@@ -182,10 +189,12 @@
         }
     }
 
-    
 </script>
 
 <style lang="scss" scoped>
+    .pagewrap{
+        height:100%;
+    }
     .weui_cells{
         overflow:visible;
     }
