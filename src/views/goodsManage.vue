@@ -286,9 +286,14 @@
 
 			$('.weui-infinite-scroll').hide();
 			let data = results.data;
+
 			if(data.error == 0){
 				vm.dataGoods = JSON.parse(data.datas);
+			}else if(data.error == 1){
+				vm.dataGoods = [];
+				$.toast(data.desc, "cancel");
 			}
+
 		}).catch(()=>{
 			$('.weui-infinite-scroll').hide();
 			$.toptip('获取失败',1000, 'error');

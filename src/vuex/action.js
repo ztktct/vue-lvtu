@@ -30,7 +30,11 @@ export const setNewOrders = ({ dispatch },data) =>{
 export const setNewTicket = ({ dispatch },data) =>{
 	dispatch('SET_NEW_TICKET',data);
 }
+// 设置新的退款信息
 export const setNewRefund = ({ dispatch },data) =>{
 	dispatch('SET_NEW_REFUND',data);
 }
-
+// 设置需要查询的订单的参数
+export const setQueryOrderBody = ({ dispatch },data) =>{
+	dispatch('SET_QUERY_ORDER_BODY',data);
+}

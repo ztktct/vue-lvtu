@@ -21,7 +21,8 @@ const state = {
     newOrders:[],           // 各个新订单数量
     newTicket:0,            // 新补票的数量
     newRefund:0,            // 新的退款信息
-    hasNewMsg:0             // 是否提示有新消息，0:无，1:有，用于自动刷新订单等列表
+    hasNewMsg:0,             // 是否提示有新消息，0:无，1:有，用于自动刷新订单等列表
+    queryOrderBody:{}       // 需要查询的订单列表的参数
 };
 
 let _info = localStorage.getItem('LVTUDIANDIAN_USERINFO');
@@ -78,6 +79,10 @@ const mutations = {
     // 设置新的退款信息
     SET_NEW_REFUND(state,num){
         state.newRefund = num;
+    },
+    // 设置需要查询的订单的参数
+    SET_QUERY_ORDER_BODY(state,body){
+        state.queryOrderBody = body
     }
 }
 

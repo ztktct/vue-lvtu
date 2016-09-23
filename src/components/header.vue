@@ -86,8 +86,9 @@
             }).then( results =>{
                 
                 // 设置店铺列表    
-                _self.shopList = JSON.parse(results.data.shopList);
-                
+                _self.shopList = JSON.parse(results.data.shopList).sort(function(a,b){
+                  return a.shop_id - b.shop_id;
+                });
                 // 设置初始店铺ID
                 // 如果开始ID没有设置，就取第一个店铺
                 if(!_self.shopId){

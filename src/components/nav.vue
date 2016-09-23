@@ -17,6 +17,9 @@
                     <li>
                         <a v-link="{name:'tickets'}" @click="toggleNav" title=""><i class="icon-bill-08"></i>补票延长</a>
                     </li>
+                    <li>
+                        <a v-link="{name:'query'}" @click="toggleNav" title=""><i class="icon-bill-10"></i>订单查询</a>
+                    </li>
                 </ul>
                 <input type="button" class="exit-login" @click="logout" value="退出登录">
             </nav>

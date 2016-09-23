@@ -61,6 +61,18 @@ export default function(router){
             component: function(resolve){
                 require(['./views/login.vue'],resolve);
             }
+        },
+        '/query':{      //订单查询
+            name:'query',
+            component: function(resolve){
+                require(['./views/queryOrder.vue'],resolve);
+            }
+        },
+        '/table':{      //订单查询详情页
+            name:'table',
+            component: function(resolve){
+                require(['./views/orderTable.vue'],resolve);
+            }
         }
     })
 }

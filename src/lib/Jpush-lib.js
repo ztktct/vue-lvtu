@@ -106,18 +106,18 @@ function queryNewMessage(vm, audio) {
     if (vm.hasLogin == 0 && _partnerId == 0 && _train == ''){
         return false;
     }
-        // 设备准备完毕
-        document.addEventListener("deviceready", onDeviceReady, false);
-        // 监听设备别名设置
-        document.addEventListener("jpush.setTagsWithAlias", onTagsWithAlias, false);
-        // 点击通知进入应用程序时会触发该事件
-        document.addEventListener("jpush.openNotification", onOpenNotification, false);
-        // 收到通知时会触发该事件
-        document.addEventListener("jpush.receiveNotification", onReceiveNotification, false);
-        // 收到自定义消息时触发这个事件，推荐使用事件的方式传递。
-        // document.addEventListener("jpush.receiveMessage", onReceiveMessage, false);
+    // 设备准备完毕
+    document.addEventListener("deviceready", onDeviceReady, false);
+    // 监听设备别名设置
+    document.addEventListener("jpush.setTagsWithAlias", onTagsWithAlias, false);
+    // 点击通知进入应用程序时会触发该事件
+    document.addEventListener("jpush.openNotification", onOpenNotification, false);
+    // 收到通知时会触发该事件
+    document.addEventListener("jpush.receiveNotification", onReceiveNotification, false);
+    // 收到自定义消息时触发这个事件，推荐使用事件的方式传递。
+    // document.addEventListener("jpush.receiveMessage", onReceiveMessage, false);
 
-        return true;
+    return true;
     
 }
 
